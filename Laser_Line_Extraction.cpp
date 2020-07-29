@@ -8,11 +8,11 @@
 using namespace std;
 using namespace cv;
 
-//·½·¨Ò»£º¼«Öµ·¨£¬Ñ°ÕÒÃ¿Ò»ĞĞµÄ×î´óÖµ
+//æ–¹æ³•ä¸€ï¼šæå€¼æ³•ï¼Œå¯»æ‰¾æ¯ä¸€è¡Œçš„æœ€å¤§å€¼
 Mat Max_Value(Mat Src);
-//·½·¨¶ş£ºãĞÖµ·¨£¬´ÓÍ¼ÏñÁ½²àÏòÖĞ¼äÕÒµ½¼¤¹âÏßÁ½²à±ß½ç£¬Á½²àµÄÖĞµã¾ÍÊÇ¼¤¹âÏßµÄÖĞµã
+//æ–¹æ³•äºŒï¼šé˜ˆå€¼æ³•ï¼Œä»å›¾åƒä¸¤ä¾§å‘ä¸­é—´æ‰¾åˆ°æ¿€å…‰çº¿ä¸¤ä¾§è¾¹ç•Œï¼Œä¸¤ä¾§çš„ä¸­ç‚¹å°±æ˜¯æ¿€å…‰çº¿çš„ä¸­ç‚¹
 Mat Fixed_Threshold(Mat Src);
-//·½·¨Èı£º»Ò¶ÈÖÊĞÄ·¨£¬½«Í¼Ïñ»Ò¶È×÷ÎªÖÊÁ¿£¬Ñ°ÕÒÃ¿Ò»ĞĞµÄÖØĞÄ×ø±ê×÷Îª¼¤¹âÏßµÄ×ø±ê
+//æ–¹æ³•ä¸‰ï¼šç°åº¦è´¨å¿ƒæ³•ï¼Œå°†å›¾åƒç°åº¦ä½œä¸ºè´¨é‡ï¼Œå¯»æ‰¾æ¯ä¸€è¡Œçš„é‡å¿ƒåæ ‡ä½œä¸ºæ¿€å…‰çº¿çš„åæ ‡
 Mat Gray_Weighted(Mat Src);
 
 Mat Max_Value(Mat Src)
@@ -22,7 +22,7 @@ Mat Max_Value(Mat Src)
 	cvtColor(Src, img, CV_BGR2GRAY);
 	int h = img.rows, w = img.cols;
 	int index = 0;
-	//ÕâÀïÉèÖÃÒ»¸öãĞÖµ£¬Ã¿Ò»ĞĞµÄ×î´óÖµ²»Ò»¶¨ÊÇ¼¤¹âÏß£¬´óÓÚÕâ¸öãĞÖµ²ÅÈÏÎªÊÇ¼¤¹âÏß
+	//è¿™é‡Œè®¾ç½®ä¸€ä¸ªé˜ˆå€¼ï¼Œæ¯ä¸€è¡Œçš„æœ€å¤§å€¼ä¸ä¸€å®šæ˜¯æ¿€å…‰çº¿ï¼Œå¤§äºè¿™ä¸ªé˜ˆå€¼æ‰è®¤ä¸ºæ˜¯æ¿€å…‰çº¿
 	int threshod = 170;
 	for (int i = 0; i < h; i++)
 	{
@@ -38,7 +38,7 @@ Mat Max_Value(Mat Src)
 		if (max_row > threshod)
 			Laser_Line.at<uint8_t>(i, index) = 255;
 	}
-	imshow("¼«Öµ·¨", Laser_Line);
+	imshow("æå€¼æ³•", Laser_Line);
 	waitKey(0);
 	return Laser_Line;
 }
@@ -55,7 +55,7 @@ Mat Fixed_Threshold(Mat Src)
 	//threshold(img, img, threshod, 255, THRESH_BINARY);
 	for (int i = 0; i < h; i++)
 	{
-		//´Ó×ó²à¿ªÊ¼ÏòÓÒ²éÕÒ
+		//ä»å·¦ä¾§å¼€å§‹å‘å³æŸ¥æ‰¾
 		for (int j = 0; j < w; j++)
 		{
 			if ((img.at<uint8_t>(i, j) > threshod))
@@ -65,7 +65,7 @@ Mat Fixed_Threshold(Mat Src)
 				break;
 			}
 		}
-		//´ÓÓÒ²à¿ªÊ¼Ïò×ó²éÕÒ
+		//ä»å³ä¾§å¼€å§‹å‘å·¦æŸ¥æ‰¾
 		for (int j = w - 1; j >= 0; j--)
 		{
 			if ((img.at<uint8_t>(i, j) > threshod))
@@ -76,11 +76,11 @@ Mat Fixed_Threshold(Mat Src)
 			}
 		}
 		if ((index1 != 0) && (index2 != 0) && (abs(index1 - index2) < 50))
-			Laser_Line.at<uint8_t>(i, (index1 + index2) / 2) = 1;
+			Laser_Line.at<uint8_t>(i, (index1 + index2) / 2) = 255;
 		index1 = 0;
 		index2 = 0;
 	}
-	imshow("ãĞÖµ·¨", Laser_Line);
+	imshow("é˜ˆå€¼æ³•", Laser_Line);
 	waitKey(0);
 	return Laser_Line;
 }
@@ -104,12 +104,12 @@ Mat Gray_Weighted(Mat Src)
 		}
 		if (sp)
 		{
-			xpos = sxp / sp;//xpos¼´ÎªÃ¿Ò»ĞĞµÄÖØĞÄ×ø±ê
-			//xpos¾ÍÊÇÕâÒ»ĞĞµÄÖØĞÄ×İ×ø±ê
+			xpos = sxp / sp;//xposå³ä¸ºæ¯ä¸€è¡Œçš„é‡å¿ƒåæ ‡
+			//xposå°±æ˜¯è¿™ä¸€è¡Œçš„é‡å¿ƒçºµåæ ‡
 			Laser_Line.at<uint8_t>(i, xpos) = 255;
 		}
 	}
-	imshow("»Ò¶ÈÖÊĞÄ·¨", Laser_Line);
+	imshow("ç°åº¦è´¨å¿ƒæ³•", Laser_Line);
 	waitKey(0);
 	return Laser_Line;
 }
